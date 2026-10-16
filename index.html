@@ -51,9 +51,22 @@ button:active{transform:scale(.96)}
 nav button .ic{transition:transform .2s}
 nav button.on .ic{transform:translateY(-2px) scale(1.15)}
 @media (prefers-reduced-motion:reduce){.pgin,#pend:not(.hide){animation:none}button,nav button .ic{transition:none}}
+#bg{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1}
+.card{background:color-mix(in srgb,var(--card) 90%,transparent)}
+nav{background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(6px)}
+.nts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.nt{display:flex;flex-direction:column;align-items:center;text-align:center;padding:10px 6px;border-radius:12px;background:var(--bg);min-width:0}
+.nt b{font-size:28px;line-height:1.1;margin:4px 0}
+.nt small{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nt.lo b{color:var(--bad)}.nt.hi b{color:var(--ok)}.nt.av b{color:var(--ac)}
+.bar{display:flex;height:10px;border-radius:6px;overflow:hidden;margin:14px 0 8px;background:var(--bd)}
+.bar i{display:block;height:100%}
+.leg{display:flex;justify-content:space-between;gap:6px;font-size:13px;color:var(--mut);flex-wrap:wrap}
 </style>
 </head>
 <body>
+<canvas id="bg" aria-hidden="true"></canvas>
 <div class="wrap">
 
 <section id="auth" class="card hide">
@@ -91,8 +104,9 @@ nav button.on .ic{transform:translateY(-2px) scale(1.15)}
   <div id="pg-done" class="hide">
     <div class="card stats">
       <div class="stat"><b id="sTot">0</b><span class="mut" data-i="finished"></span></div>
-      <div class="stat"><b id="sAvg">–</b><span class="mut" data-i="avg"></span></div>
+      
     </div>
+    <div id="notesBox"></div>
     <div class="card">
       <input type="text" id="f" data-ph="phF">
       <button id="shareList" class="sm" type="button" data-i="share" style="margin-bottom:10px"></button>
@@ -136,8 +150,9 @@ nav button.on .ic{transform:translateY(-2px) scale(1.15)}
   <div id="vBody">
     <div class="card stats">
       <div class="stat"><b id="vTot">0</b><span class="mut" data-i="finished"></span></div>
-      <div class="stat"><b id="vAvg">–</b><span class="mut" data-i="avg"></span></div>
+      
     </div>
+    <div id="vNotes"></div>
     <div class="card"><div id="vList"></div></div>
   </div>
   <button id="vMake" type="button" style="width:100%" data-i="vMake"></button>
@@ -242,8 +257,8 @@ const IND=["Shovel Knight","Fez","Braid","Super Meat Boy","The Messenger","Katan
 CAT.push(...IND);
 CAT.splice(0,CAT.length,...new Set(CAT));
 const I={
-pt:{shareT:"Partilhar a minha lista",share:"Partilhar",shPriv:"Privado",shPub:"Público",shHint:"No modo público, quem tiver o link vê a sua lista (só leitura).",shCopy:"Copiar link",copied:"Copiado!",confirmPub:"Tornar a sua lista pública para poder partilhar?",shareTxt:"Já zerei {n} jogos! 🎮 Veja a minha lista:",gameTxt:"Zerei {g} com nota {s}/10 🎮",vNone:"Perfil não encontrado ou privado.",vMake:"Criar a minha lista",shNeed:"Falta executar o SQL da partilha no Supabase.",eNet:"Sem ligação ou erro no servidor. Tente de novo.",eConf:"Conta criada, mas é preciso desativar a confirmação por e-mail no Supabase.",cvUrl:"Link da capa (opcional)",cvPick:"Escolher imagem do aparelho",cvBad:"Não foi possível ler a imagem.",authSub:"Crie uma conta para guardar a sua lista de jogos terminados.",login:"Entrar",reg:"Cadastrar",create:"Criar conta",user:"Nome de usuário",pass:"Senha (6 a 12 caracteres)",note:"Os seus jogos ficam guardados na sua conta.",nSearch:"Pesquisar",nDone:"Zerados",nProf:"Perfil",hSearch:"Pesquisar jogos",hDone:"Jogos zerados",hProf:"Perfil e opções",phQ:"Ex.: Zelda, Hollow Knight…",phF:"Filtrar minha lista…",finished:"terminados",avg:"nota média",save:"Marcar como finalizado",cancel:"Cancelar",name:"O seu nome",saveName:"Guardar nome",opts:"Opções",lang:"Idioma",theme:"Tema",light:"Claro",dark:"Escuro",account:"Conta",out:"Sair",catCount:"{n} jogos no catálogo",done:"Finalizei",inList:"✓ na lista",addQ:"Não encontrou? Adicionar",add:"Adicionar",none:"Nenhum resultado.",empty:"Ainda não há jogos. Pesquise e adicione o primeiro!",eShort:"Nome de 3 a 20 letras e senha de 6 a 12 caracteres.",eTaken:"Esse nome já existe.",eBad:"Usuário ou senha incorretos.",nameOk:"Nome atualizado.",nameShort:"Use de 3 a 20 letras."},
-en:{shareT:"Share my list",share:"Share",shPriv:"Private",shPub:"Public",shHint:"When public, anyone with the link can see your list (read-only).",shCopy:"Copy link",copied:"Copied!",confirmPub:"Make your list public so you can share it?",shareTxt:"I have finished {n} games! 🎮 Check out my list:",gameTxt:"I finished {g} and rated it {s}/10 🎮",vNone:"Profile not found or private.",vMake:"Create my list",shNeed:"The sharing SQL still needs to be run in Supabase.",eNet:"No connection or server error. Try again.",eConf:"Account created, but email confirmation must be turned off in Supabase.",cvUrl:"Cover image link (optional)",cvPick:"Choose image from device",cvBad:"Could not read the image.",authSub:"Create an account to keep your list of finished games.",login:"Log in",reg:"Sign up",create:"Create account",user:"Username",pass:"Password (6–12 characters)",note:"Your games are saved in your account.",nSearch:"Search",nDone:"Finished",nProf:"Profile",hSearch:"Search games",hDone:"Finished games",hProf:"Profile & options",phQ:"E.g.: Zelda, Hollow Knight…",phF:"Filter my list…",finished:"finished",avg:"average score",save:"Mark as finished",cancel:"Cancel",name:"Your name",saveName:"Save name",opts:"Options",lang:"Language",theme:"Theme",light:"Light",dark:"Dark",account:"Account",out:"Log out",catCount:"{n} games in the catalog",done:"Finished it",inList:"✓ in list",addQ:"Can't find it? Add",add:"Add",none:"No results.",empty:"No games yet. Search and add your first one!",eShort:"Name: 3–20 characters; password: 6–12 characters.",eTaken:"That name already exists.",eBad:"Wrong username or password.",nameOk:"Name updated.",nameShort:"Use 3 to 20 characters."}};
+pt:{notes:"Notas",lowest:"Mais baixa",avgN:"Média",highest:"Mais alta",gamesW:"jogos",bLow:"Baixas (<5)",bMid:"Médias (5–7,5)",bHigh:"Altas (8–10)",shareT:"Partilhar a minha lista",share:"Partilhar",shPriv:"Privado",shPub:"Público",shHint:"No modo público, quem tiver o link vê a sua lista (só leitura).",shCopy:"Copiar link",copied:"Copiado!",confirmPub:"Tornar a sua lista pública para poder partilhar?",shareTxt:"Já zerei {n} jogos! 🎮 Veja a minha lista:",gameTxt:"Zerei {g} com nota {s}/10 🎮",vNone:"Perfil não encontrado ou privado.",vMake:"Criar a minha lista",shNeed:"Falta executar o SQL da partilha no Supabase.",eNet:"Sem ligação ou erro no servidor. Tente de novo.",eConf:"Conta criada, mas é preciso desativar a confirmação por e-mail no Supabase.",cvUrl:"Link da capa (opcional)",cvPick:"Escolher imagem do aparelho",cvBad:"Não foi possível ler a imagem.",authSub:"Crie uma conta para guardar a sua lista de jogos terminados.",login:"Entrar",reg:"Cadastrar",create:"Criar conta",user:"Nome de usuário",pass:"Senha (6 a 12 caracteres)",note:"Os seus jogos ficam guardados na sua conta.",nSearch:"Pesquisar",nDone:"Zerados",nProf:"Perfil",hSearch:"Pesquisar jogos",hDone:"Jogos zerados",hProf:"Perfil e opções",phQ:"Ex.: Zelda, Hollow Knight…",phF:"Filtrar minha lista…",finished:"terminados",avg:"nota média",save:"Marcar como finalizado",cancel:"Cancelar",name:"O seu nome",saveName:"Guardar nome",opts:"Opções",lang:"Idioma",theme:"Tema",light:"Claro",dark:"Escuro",account:"Conta",out:"Sair",catCount:"{n} jogos no catálogo",done:"Finalizei",inList:"✓ na lista",addQ:"Não encontrou? Adicionar",add:"Adicionar",none:"Nenhum resultado.",empty:"Ainda não há jogos. Pesquise e adicione o primeiro!",eShort:"Nome de 3 a 20 letras e senha de 6 a 12 caracteres.",eTaken:"Esse nome já existe.",eBad:"Usuário ou senha incorretos.",nameOk:"Nome atualizado.",nameShort:"Use de 3 a 20 letras."},
+en:{notes:"Ratings",lowest:"Lowest",avgN:"Average",highest:"Highest",gamesW:"games",bLow:"Low (<5)",bMid:"Medium (5–7.5)",bHigh:"High (8–10)",shareT:"Share my list",share:"Share",shPriv:"Private",shPub:"Public",shHint:"When public, anyone with the link can see your list (read-only).",shCopy:"Copy link",copied:"Copied!",confirmPub:"Make your list public so you can share it?",shareTxt:"I have finished {n} games! 🎮 Check out my list:",gameTxt:"I finished {g} and rated it {s}/10 🎮",vNone:"Profile not found or private.",vMake:"Create my list",shNeed:"The sharing SQL still needs to be run in Supabase.",eNet:"No connection or server error. Try again.",eConf:"Account created, but email confirmation must be turned off in Supabase.",cvUrl:"Cover image link (optional)",cvPick:"Choose image from device",cvBad:"Could not read the image.",authSub:"Create an account to keep your list of finished games.",login:"Log in",reg:"Sign up",create:"Create account",user:"Username",pass:"Password (6–12 characters)",note:"Your games are saved in your account.",nSearch:"Search",nDone:"Finished",nProf:"Profile",hSearch:"Search games",hDone:"Finished games",hProf:"Profile & options",phQ:"E.g.: Zelda, Hollow Knight…",phF:"Filter my list…",finished:"finished",avg:"average score",save:"Mark as finished",cancel:"Cancel",name:"Your name",saveName:"Save name",opts:"Options",lang:"Language",theme:"Theme",light:"Light",dark:"Dark",account:"Account",out:"Log out",catCount:"{n} games in the catalog",done:"Finished it",inList:"✓ in list",addQ:"Can't find it? Add",add:"Add",none:"No results.",empty:"No games yet. Search and add your first one!",eShort:"Name: 3–20 characters; password: 6–12 characters.",eTaken:"That name already exists.",eBad:"Wrong username or password.",nameOk:"Name updated.",nameShort:"Use 3 to 20 characters."}};
 const $=id=>document.getElementById(id);
 const norm=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -337,10 +352,19 @@ function show(){
   if(ok){go(page);render();search()}
 }
 
+function notesHTML(g){
+  if(!g.length)return"";
+  const sc=g.slice().sort((a,b)=>a.score-b.score),lo=sc[0],hi=sc[sc.length-1];
+  const av=(g.reduce((a,x)=>a+Number(x.score),0)/g.length).toFixed(1);
+  const b=[0,0,0];g.forEach(x=>{const n=Number(x.score);b[n<5?0:n<8?1:2]++});
+  const col=(k,v,n,c)=>`<div class="nt ${c}"><span class="mut">${t(k)}</span><b>${v}</b><small class="mut">${n}</small></div>`;
+  const dot=(c,k,n)=>`<span><span style="color:${c}">●</span> ${t(k)}: <b>${n}</b></span>`;
+  return `<div class="card"><h2>${t("notes")}</h2><div class="nts">${col("lowest",lo.score,esc(lo.name),"lo")}${col("avgN",av,g.length+" "+t("gamesW"),"av")}${col("highest",hi.score,esc(hi.name),"hi")}</div><div class="bar"><i style="flex:${b[0]};background:var(--bad)"></i><i style="flex:${b[1]};background:var(--ac)"></i><i style="flex:${b[2]};background:var(--ok)"></i></div><div class="leg">${dot("var(--bad)","bLow",b[0])}${dot("var(--ac)","bMid",b[1])}${dot("var(--ok)","bHigh",b[2])}</div></div>`;
+}
 function render(){
   const g=me_().games,f=norm($("f").value);
   $("sTot").textContent=g.length;
-  $("sAvg").textContent=g.length?(g.reduce((a,x)=>a+x.score,0)/g.length).toFixed(1):"–";
+  $("notesBox").innerHTML=notesHTML(g);
   const items=g.map((x,i)=>({...x,i})).filter(x=>norm(x.name).includes(f)).reverse();
   $("list").innerHTML=items.length?items.map(x=>`<div class="row"><div class="it">${cvHtml(x.name,x.cover)}<div><div class="name">${esc(x.name)}</div><span class="mut">${x.date}</span></div></div><div style="display:flex;gap:8px;align-items:center"><span class="badge">${x.score}</span><button class="ghost sm" data-sh="${x.i}" type="button" aria-label="share">📤</button><button class="ghost sm" data-del="${x.i}" type="button" aria-label="✕">✕</button></div></div>`).join(""):'<p class="mut">'+t(g.length?"none":"empty")+"</p>";
 }
@@ -454,7 +478,7 @@ async function viewProfile(h){
     const g=r.ok?await r.json():[];
     $("vTitle").textContent="🎮 "+p[0].name;
     $("vTot").textContent=g.length;
-    $("vAvg").textContent=g.length?(g.reduce((a,x)=>a+Number(x.score),0)/g.length).toFixed(1):"–";
+    $("vNotes").innerHTML=notesHTML(g);
     $("vList").innerHTML=g.map(x=>`<div class="row"><div class="it">${cvHtml(x.name,x.cover)}<div><div class="name">${esc(x.name)}</div><span class="mut">${esc(x.date||"")}</span></div></div><span class="badge">${x.score}</span></div>`).join("")||'<p class="mut">'+t("empty")+"</p>";
   }catch(e){$("vTitle").textContent=t("eNet")}
 }
@@ -472,6 +496,34 @@ $("cvFile").onchange=e=>{
   rd.readAsDataURL(f);e.target.value="";
 };
 if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
+(function(){
+  const cv=$("bg"),cx=cv.getContext("2d"),red=matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const C=["#4cc88d","#ff6b6b","#6fa8ff","#e58bd8"];
+  let W=0,H=0,P=[];
+  function mk(i){return{x:Math.random()*W,y:Math.random()*H,s:16+Math.random()*22,t:i%4,v:.12+Math.random()*.3,r:Math.random()*6.28,w:(Math.random()-.5)*.012,a:.14+Math.random()*.16,ph:Math.random()*6.28}}
+  function size(){
+    const d=devicePixelRatio||1;W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;cx.setTransform(d,0,0,d,0,0);
+    const n=Math.max(14,Math.min(40,Math.round(W*H/20000)));
+    while(P.length<n)P.push(mk(P.length));P.length=n;
+  }
+  function shape(p){
+    const s=p.s/2;cx.beginPath();
+    if(p.t===0){cx.moveTo(0,-s);cx.lineTo(s,s*.85);cx.lineTo(-s,s*.85);cx.closePath()}
+    else if(p.t===1)cx.arc(0,0,s,0,6.2832);
+    else if(p.t===2){cx.moveTo(-s,-s);cx.lineTo(s,s);cx.moveTo(s,-s);cx.lineTo(-s,s)}
+    else cx.rect(-s,-s,2*s,2*s);
+  }
+  function frame(){
+    cx.clearRect(0,0,W,H);
+    for(const p of P){
+      if(!red){p.y-=p.v;p.r+=p.w;p.ph+=.01;p.x+=Math.sin(p.ph)*.25;if(p.y<-40){p.y=H+40;p.x=Math.random()*W}}
+      cx.save();cx.translate(p.x,p.y);cx.rotate(p.r);cx.globalAlpha=p.a;cx.strokeStyle=C[p.t];cx.lineWidth=2.5;cx.lineCap="round";cx.lineJoin="round";shape(p);cx.stroke();cx.restore();
+    }
+    if(!red)requestAnimationFrame(frame);
+  }
+  size();frame();
+  addEventListener("resize",()=>{size();if(red)frame()});
+})();
 const vu=new URLSearchParams(location.search).get("u");
 applyTheme();setMode("login");applyLang();if(vu)viewProfile(vu);else boot();
 </script>
