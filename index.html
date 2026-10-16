@@ -95,6 +95,7 @@ nav button.on .ic{transform:translateY(-2px) scale(1.15)}
     </div>
     <div class="card">
       <input type="text" id="f" data-ph="phF">
+      <button id="shareList" class="sm" type="button" data-i="share" style="margin-bottom:10px"></button>
       <div id="list"></div>
     </div>
   </div>
@@ -114,12 +115,33 @@ nav button.on .ic{transform:translateY(-2px) scale(1.15)}
       <div class="seg"><button id="bLight" type="button" data-i="light"></button><button id="bDark" type="button" data-i="dark"></button></div>
     </div>
     <div class="card">
+      <h2 data-i="shareT"></h2>
+      <div class="seg"><button id="bPriv" type="button" data-i="shPriv"></button><button id="bPub" type="button" data-i="shPub"></button></div>
+      <p class="mut" data-i="shHint"></p>
+      <p class="err" id="shErr"></p>
+      <div id="shBox" class="hide">
+        <input type="text" id="shLink" readonly>
+        <div style="display:flex;gap:8px"><button id="shNative" type="button" data-i="share"></button><button id="shCopy" class="ghost" type="button" data-i="shCopy"></button></div>
+      </div>
+    </div>
+    <div class="card">
       <h2 data-i="account"></h2>
       <button class="ghost" id="out" type="button" data-i="out"></button>
     </div>
   </div>
 </section>
 
+<section id="view" class="hide">
+  <div class="top"><h1 id="vTitle"></h1></div>
+  <div id="vBody">
+    <div class="card stats">
+      <div class="stat"><b id="vTot">0</b><span class="mut" data-i="finished"></span></div>
+      <div class="stat"><b id="vAvg">–</b><span class="mut" data-i="avg"></span></div>
+    </div>
+    <div class="card"><div id="vList"></div></div>
+  </div>
+  <button id="vMake" type="button" style="width:100%" data-i="vMake"></button>
+</section>
 <p class="mut" style="text-align:center">Game data: <a href="https://rawg.io" target="_blank" rel="noopener" style="color:var(--ac)">RAWG</a></p>
 </div>
 <nav id="nav" class="hide">
@@ -220,8 +242,8 @@ const IND=["Shovel Knight","Fez","Braid","Super Meat Boy","The Messenger","Katan
 CAT.push(...IND);
 CAT.splice(0,CAT.length,...new Set(CAT));
 const I={
-pt:{eNet:"Sem ligação ou erro no servidor. Tente de novo.",eConf:"Conta criada, mas é preciso desativar a confirmação por e-mail no Supabase.",cvUrl:"Link da capa (opcional)",cvPick:"Escolher imagem do aparelho",cvBad:"Não foi possível ler a imagem.",authSub:"Crie uma conta para guardar a sua lista de jogos terminados.",login:"Entrar",reg:"Cadastrar",create:"Criar conta",user:"Nome de usuário",pass:"Senha (6 a 12 caracteres)",note:"Os seus jogos ficam guardados na sua conta.",nSearch:"Pesquisar",nDone:"Zerados",nProf:"Perfil",hSearch:"Pesquisar jogos",hDone:"Jogos zerados",hProf:"Perfil e opções",phQ:"Ex.: Zelda, Hollow Knight…",phF:"Filtrar minha lista…",finished:"terminados",avg:"nota média",save:"Marcar como finalizado",cancel:"Cancelar",name:"O seu nome",saveName:"Guardar nome",opts:"Opções",lang:"Idioma",theme:"Tema",light:"Claro",dark:"Escuro",account:"Conta",out:"Sair",catCount:"{n} jogos no catálogo",done:"Finalizei",inList:"✓ na lista",addQ:"Não encontrou? Adicionar",add:"Adicionar",none:"Nenhum resultado.",empty:"Ainda não há jogos. Pesquise e adicione o primeiro!",eShort:"Nome de 3 a 20 letras e senha de 6 a 12 caracteres.",eTaken:"Esse nome já existe.",eBad:"Usuário ou senha incorretos.",nameOk:"Nome atualizado.",nameShort:"Use de 3 a 20 letras."},
-en:{eNet:"No connection or server error. Try again.",eConf:"Account created, but email confirmation must be turned off in Supabase.",cvUrl:"Cover image link (optional)",cvPick:"Choose image from device",cvBad:"Could not read the image.",authSub:"Create an account to keep your list of finished games.",login:"Log in",reg:"Sign up",create:"Create account",user:"Username",pass:"Password (6–12 characters)",note:"Your games are saved in your account.",nSearch:"Search",nDone:"Finished",nProf:"Profile",hSearch:"Search games",hDone:"Finished games",hProf:"Profile & options",phQ:"E.g.: Zelda, Hollow Knight…",phF:"Filter my list…",finished:"finished",avg:"average score",save:"Mark as finished",cancel:"Cancel",name:"Your name",saveName:"Save name",opts:"Options",lang:"Language",theme:"Theme",light:"Light",dark:"Dark",account:"Account",out:"Log out",catCount:"{n} games in the catalog",done:"Finished it",inList:"✓ in list",addQ:"Can't find it? Add",add:"Add",none:"No results.",empty:"No games yet. Search and add your first one!",eShort:"Name: 3–20 characters; password: 6–12 characters.",eTaken:"That name already exists.",eBad:"Wrong username or password.",nameOk:"Name updated.",nameShort:"Use 3 to 20 characters."}};
+pt:{shareT:"Partilhar a minha lista",share:"Partilhar",shPriv:"Privado",shPub:"Público",shHint:"No modo público, quem tiver o link vê a sua lista (só leitura).",shCopy:"Copiar link",copied:"Copiado!",confirmPub:"Tornar a sua lista pública para poder partilhar?",shareTxt:"Já zerei {n} jogos! 🎮 Veja a minha lista:",gameTxt:"Zerei {g} com nota {s}/10 🎮",vNone:"Perfil não encontrado ou privado.",vMake:"Criar a minha lista",shNeed:"Falta executar o SQL da partilha no Supabase.",eNet:"Sem ligação ou erro no servidor. Tente de novo.",eConf:"Conta criada, mas é preciso desativar a confirmação por e-mail no Supabase.",cvUrl:"Link da capa (opcional)",cvPick:"Escolher imagem do aparelho",cvBad:"Não foi possível ler a imagem.",authSub:"Crie uma conta para guardar a sua lista de jogos terminados.",login:"Entrar",reg:"Cadastrar",create:"Criar conta",user:"Nome de usuário",pass:"Senha (6 a 12 caracteres)",note:"Os seus jogos ficam guardados na sua conta.",nSearch:"Pesquisar",nDone:"Zerados",nProf:"Perfil",hSearch:"Pesquisar jogos",hDone:"Jogos zerados",hProf:"Perfil e opções",phQ:"Ex.: Zelda, Hollow Knight…",phF:"Filtrar minha lista…",finished:"terminados",avg:"nota média",save:"Marcar como finalizado",cancel:"Cancelar",name:"O seu nome",saveName:"Guardar nome",opts:"Opções",lang:"Idioma",theme:"Tema",light:"Claro",dark:"Escuro",account:"Conta",out:"Sair",catCount:"{n} jogos no catálogo",done:"Finalizei",inList:"✓ na lista",addQ:"Não encontrou? Adicionar",add:"Adicionar",none:"Nenhum resultado.",empty:"Ainda não há jogos. Pesquise e adicione o primeiro!",eShort:"Nome de 3 a 20 letras e senha de 6 a 12 caracteres.",eTaken:"Esse nome já existe.",eBad:"Usuário ou senha incorretos.",nameOk:"Nome atualizado.",nameShort:"Use de 3 a 20 letras."},
+en:{shareT:"Share my list",share:"Share",shPriv:"Private",shPub:"Public",shHint:"When public, anyone with the link can see your list (read-only).",shCopy:"Copy link",copied:"Copied!",confirmPub:"Make your list public so you can share it?",shareTxt:"I have finished {n} games! 🎮 Check out my list:",gameTxt:"I finished {g} and rated it {s}/10 🎮",vNone:"Profile not found or private.",vMake:"Create my list",shNeed:"The sharing SQL still needs to be run in Supabase.",eNet:"No connection or server error. Try again.",eConf:"Account created, but email confirmation must be turned off in Supabase.",cvUrl:"Cover image link (optional)",cvPick:"Choose image from device",cvBad:"Could not read the image.",authSub:"Create an account to keep your list of finished games.",login:"Log in",reg:"Sign up",create:"Create account",user:"Username",pass:"Password (6–12 characters)",note:"Your games are saved in your account.",nSearch:"Search",nDone:"Finished",nProf:"Profile",hSearch:"Search games",hDone:"Finished games",hProf:"Profile & options",phQ:"E.g.: Zelda, Hollow Knight…",phF:"Filter my list…",finished:"finished",avg:"average score",save:"Mark as finished",cancel:"Cancel",name:"Your name",saveName:"Save name",opts:"Options",lang:"Language",theme:"Theme",light:"Light",dark:"Dark",account:"Account",out:"Log out",catCount:"{n} games in the catalog",done:"Finished it",inList:"✓ in list",addQ:"Can't find it? Add",add:"Add",none:"No results.",empty:"No games yet. Search and add your first one!",eShort:"Name: 3–20 characters; password: 6–12 characters.",eTaken:"That name already exists.",eBad:"Wrong username or password.",nameOk:"Name updated.",nameShort:"Use 3 to 20 characters."}};
 const $=id=>document.getElementById(id);
 const norm=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -247,20 +269,20 @@ async function sb(path,o={},retry=true){
 }
 async function loadGames(){
   const r=await sb("/rest/v1/games?select=id,name,cover,score,date&order=created_at.asc");
-  if(!r.ok)throw 0;U.games=await r.json();
+  if(!r.ok)throw new Error("games "+r.status+": "+(await r.text()).slice(0,140));U.games=await r.json();
 }
 async function boot(){
   if(S){
     try{
       const r=await sb("/auth/v1/user");
       if(r.status===401||r.status===403){S=null;save("jf_sb",null)}
-      else if(r.ok){const d=await r.json();U={name:(d.user_metadata&&d.user_metadata.name)||"",games:[]};me=d.id;await loadGames()}
-      else throw 0;
-    }catch(e){U=null;me=null;$("aerr").textContent=t("eNet")}
+      else if(r.ok){const d=await r.json();U={name:(d.user_metadata&&d.user_metadata.name)||"",games:[]};me=d.id;U.email=d.email||"";await loadGames();await loadProfile()}
+      else throw new Error("user "+r.status);
+    }catch(e){U=null;me=null;$("aerr").textContent=t("eNet")+" ("+(e&&e.message||e)+")"}
   }
   show();
 }
-const cvHtml=(n,u)=>u?`<img class="cv" src="${esc(u)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:`<div class="cv ph" style="background:hsl(${[...n].reduce((a,c)=>a+c.charCodeAt(0),0)%360} 45% 42%)">${esc(n.replace(/[^\p{L}\p{N} ]/gu,"").split(" ").filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase())}</div>`;
+const cvHtml=(n,u)=>/^(https:\/\/|data:image\/)/i.test(u||"")?`<img class="cv" src="${esc(u)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:`<div class="cv ph" style="background:hsl(${[...n].reduce((a,c)=>a+c.charCodeAt(0),0)%360} 45% 42%)">${esc(n.replace(/[^\p{L}\p{N} ]/gu,"").split(" ").filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase())}</div>`;
 const t=k=>(I[prefs.lang]||I.pt)[k]||k;
 const PG=["search","done","prof"],TT={search:"hSearch",done:"hDone",prof:"hProf"};
 function me_(){return U}
@@ -295,9 +317,9 @@ $("aok").onclick=async()=>{
     const d=await r.json();
     if(!r.ok||!d.access_token){
       const m=(d.msg||d.error_description||d.message||"").toLowerCase();
-      $("aerr").textContent=/already|registered/.test(m)?t("eTaken"):(mode==="reg"&&r.ok)?t("eConf"):/invalid|credentials/.test(m)?t("eBad"):t("eNet");
+      $("aerr").textContent=/already|registered/.test(m)?t("eTaken"):(mode==="reg"&&r.ok)?t("eConf"):/invalid login|credentials/.test(m)?t("eBad"):t("eNet")+" ("+(m||r.status)+")";
     }else{setS(d);$("pass").value="";page="search";$("aerr").textContent="";await boot()}
-  }catch(e){$("aerr").textContent=t("eNet")}
+  }catch(e){$("aerr").textContent=t("eNet")+" ("+(e&&e.message||e)+")"}
   $("aok").disabled=false;
 };
 $("out").onclick=async()=>{try{await sb("/auth/v1/logout",{method:"POST"})}catch(e){}S=null;save("jf_sb",null);U=null;me=null;show()};
@@ -306,7 +328,7 @@ function head(){$("ttl").textContent=t(TT[page]);$("who").textContent="👤 "+me
 function go(p){
   page=p;PG.forEach(x=>{$("pg-"+x).classList.toggle("hide",x!==p);$("n-"+x).classList.toggle("on",x===p)});
   const el=$("pg-"+p);el.classList.remove("pgin");void el.offsetWidth;el.classList.add("pgin");
-  head();$("pmsg").textContent="";if(p==="prof")$("newName").value=me_().name;window.scrollTo(0,0);
+  head();$("pmsg").textContent="";if(p==="prof"){$("newName").value=me_().name;paintShare()}window.scrollTo(0,0);
 }
 PG.forEach(p=>$("n-"+p).onclick=()=>go(p));
 function show(){
@@ -320,10 +342,11 @@ function render(){
   $("sTot").textContent=g.length;
   $("sAvg").textContent=g.length?(g.reduce((a,x)=>a+x.score,0)/g.length).toFixed(1):"–";
   const items=g.map((x,i)=>({...x,i})).filter(x=>norm(x.name).includes(f)).reverse();
-  $("list").innerHTML=items.length?items.map(x=>`<div class="row"><div class="it">${cvHtml(x.name,x.cover)}<div><div class="name">${esc(x.name)}</div><span class="mut">${x.date}</span></div></div><div style="display:flex;gap:8px;align-items:center"><span class="badge">${x.score}</span><button class="ghost sm" data-del="${x.i}" type="button" aria-label="✕">✕</button></div></div>`).join(""):'<p class="mut">'+t(g.length?"none":"empty")+"</p>";
+  $("list").innerHTML=items.length?items.map(x=>`<div class="row"><div class="it">${cvHtml(x.name,x.cover)}<div><div class="name">${esc(x.name)}</div><span class="mut">${x.date}</span></div></div><div style="display:flex;gap:8px;align-items:center"><span class="badge">${x.score}</span><button class="ghost sm" data-sh="${x.i}" type="button" aria-label="share">📤</button><button class="ghost sm" data-del="${x.i}" type="button" aria-label="✕">✕</button></div></div>`).join(""):'<p class="mut">'+t(g.length?"none":"empty")+"</p>";
 }
 $("f").oninput=render;
 $("list").onclick=async e=>{
+  if(e.target.dataset.sh!==undefined){shareGame(U.games[+e.target.dataset.sh]);return}
   const i=e.target.dataset.del;if(i===undefined)return;const g=U.games[+i];
   try{const r=await sb("/rest/v1/games?id=eq."+g.id,{method:"DELETE"});if(!r.ok)throw 0;U.games.splice(+i,1);render();search()}catch(x){alert(t("eNet"))}
 };
@@ -373,9 +396,68 @@ $("saveName").onclick=async()=>{
   try{
     const r=await sb("/auth/v1/user",{method:"PUT",body:JSON.stringify({data:{name:n}})});
     if(!r.ok)throw 0;
-    U.name=n;m.className="err ok";m.textContent=t("nameOk");head();
+    U.name=n;if(U.pOk)sb("/rest/v1/profiles?user_id=eq."+me,{method:"PATCH",body:JSON.stringify({name:n})}).catch(()=>{});m.className="err ok";m.textContent=t("nameOk");head();
   }catch(e){m.className="err";m.textContent=t("eNet")}
 };
+const hdl=()=>{try{const h=(U.email||"").split("@")[0];return new TextDecoder().decode(Uint8Array.from(h.match(/../g)||[],x=>parseInt(x,16)))}catch(e){return ""}};
+const link=()=>location.origin+location.pathname+"?u="+encodeURIComponent(U.handle);
+async function loadProfile(){
+  U.pub=false;U.handle=hdl();U.pOk=false;
+  try{
+    let r=await sb("/rest/v1/profiles?select=is_public&user_id=eq."+me);
+    if(!r.ok)throw 0;
+    const d=await r.json();
+    if(!d.length){
+      r=await sb("/rest/v1/profiles",{method:"POST",body:JSON.stringify({handle:U.handle,name:U.name,is_public:false})});
+      if(!r.ok)throw 0;
+    }else U.pub=!!d[0].is_public;
+    U.pOk=true;
+  }catch(e){U.pOk=false}
+}
+function paintShare(){
+  if(!U)return;
+  $("bPriv").classList.toggle("on",!U.pub);$("bPub").classList.toggle("on",!!U.pub);
+  $("shBox").classList.toggle("hide",!U.pub);$("shLink").value=U.pub?link():"";
+  $("shErr").textContent=U.pOk?"":t("shNeed");
+}
+async function setPublic(v){
+  if(!U.pOk){alert(t("shNeed"));return false}
+  try{
+    const r=await sb("/rest/v1/profiles?user_id=eq."+me,{method:"PATCH",body:JSON.stringify({is_public:v,name:U.name})});
+    if(!r.ok)throw 0;
+    U.pub=v;paintShare();return true;
+  }catch(e){alert(t("eNet"));return false}
+}
+async function doShare(text,url){
+  try{if(navigator.share){await navigator.share({title:"Meus Jogos Zerados",text,url});return}}catch(e){if(e&&e.name==="AbortError")return}
+  try{await navigator.clipboard.writeText(text+" "+url);alert(t("copied"))}catch(e){prompt("",text+" "+url)}
+}
+function shareGame(g){doShare(t("gameTxt").replace("{g}",g.name).replace("{s}",g.score),location.origin+location.pathname)}
+$("bPriv").onclick=()=>setPublic(false);
+$("bPub").onclick=()=>setPublic(true);
+$("shNative").onclick=()=>doShare(t("shareTxt").replace("{n}",U.games.length),link());
+$("shCopy").onclick=async()=>{try{await navigator.clipboard.writeText(link());alert(t("copied"))}catch(e){prompt("",link())}};
+$("shareList").onclick=async()=>{
+  if(!U.pOk){alert(t("shNeed"));return}
+  if(!U.pub){if(!confirm(t("confirmPub")))return;if(!await setPublic(true))return}
+  doShare(t("shareTxt").replace("{n}",U.games.length),link());
+};
+$("vMake").onclick=()=>{location.href=location.pathname};
+async function viewProfile(h){
+  ["auth","app","nav"].forEach(i=>$(i).classList.add("hide"));$("view").classList.remove("hide");
+  $("vTitle").textContent="…";
+  try{
+    let r=await sb("/rest/v1/profiles?select=user_id,name&is_public=eq.true&handle=eq."+encodeURIComponent(h),{anon:true});
+    const p=r.ok?await r.json():[];
+    if(!p.length){$("vTitle").textContent=t("vNone");$("vBody").classList.add("hide");return}
+    r=await sb("/rest/v1/games?select=name,cover,score,date&order=created_at.desc&user_id=eq."+p[0].user_id,{anon:true});
+    const g=r.ok?await r.json():[];
+    $("vTitle").textContent="🎮 "+p[0].name;
+    $("vTot").textContent=g.length;
+    $("vAvg").textContent=g.length?(g.reduce((a,x)=>a+Number(x.score),0)/g.length).toFixed(1):"–";
+    $("vList").innerHTML=g.map(x=>`<div class="row"><div class="it">${cvHtml(x.name,x.cover)}<div><div class="name">${esc(x.name)}</div><span class="mut">${esc(x.date||"")}</span></div></div><span class="badge">${x.score}</span></div>`).join("")||'<p class="mut">'+t("empty")+"</p>";
+  }catch(e){$("vTitle").textContent=t("eNet")}
+}
 function prevCv(){if(pending)$("pcv").innerHTML=cvHtml(pending,pendCover)}
 $("cvUrl").oninput=()=>{const v=$("cvUrl").value.trim();pendCover=/^https?:\/\//i.test(v)?v:"";prevCv()};
 $("cvPick").onclick=()=>$("cvFile").click();
@@ -390,7 +472,8 @@ $("cvFile").onchange=e=>{
   rd.readAsDataURL(f);e.target.value="";
 };
 if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-applyTheme();setMode("login");applyLang();boot();
+const vu=new URLSearchParams(location.search).get("u");
+applyTheme();setMode("login");applyLang();if(vu)viewProfile(vu);else boot();
 </script>
 </body>
 </html>
