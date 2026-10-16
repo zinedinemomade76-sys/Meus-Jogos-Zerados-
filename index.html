@@ -61,7 +61,7 @@ nav button.on .ic{transform:translateY(-2px) scale(1.15)}
   <h1>🎮 Meus Jogos Zerados</h1>
   <p class="mut" data-i="authSub"></p>
   <div class="tabs"><button id="tLogin" type="button" data-i="login"></button><button id="tReg" class="ghost" type="button" data-i="reg"></button></div>
-  <input type="text" id="user" data-ph="user" autocomplete="username">
+  <input type="text" id="user" data-ph="user" maxlength="20" autocomplete="username">
   <input type="password" id="pass" data-ph="pass" maxlength="12" autocomplete="current-password">
   <p class="err" id="aerr"></p>
   <button id="aok" type="button" style="width:100%" data-i="login"></button>
@@ -102,7 +102,7 @@ nav button.on .ic{transform:translateY(-2px) scale(1.15)}
   <div id="pg-prof" class="hide">
     <div class="card">
       <h2 data-i="name"></h2>
-      <input type="text" id="newName" autocomplete="nickname">
+      <input type="text" id="newName" maxlength="20" autocomplete="nickname">
       <p class="err" id="pmsg"></p>
       <button id="saveName" type="button" data-i="saveName"></button>
     </div>
@@ -220,8 +220,8 @@ const IND=["Shovel Knight","Fez","Braid","Super Meat Boy","The Messenger","Katan
 CAT.push(...IND);
 CAT.splice(0,CAT.length,...new Set(CAT));
 const I={
-pt:{cvUrl:"Link da capa (opcional)",cvPick:"Escolher imagem do aparelho",cvBad:"Não foi possível ler a imagem.",authSub:"Crie uma conta para guardar a sua lista de jogos terminados.",login:"Entrar",reg:"Cadastrar",create:"Criar conta",user:"Nome de usuário",pass:"Senha (4 a 12 caracteres)",note:"Protótipo: os dados ficam guardados só neste aparelho.",nSearch:"Pesquisar",nDone:"Zerados",nProf:"Perfil",hSearch:"Pesquisar jogos",hDone:"Jogos zerados",hProf:"Perfil e opções",phQ:"Ex.: Zelda, Hollow Knight…",phF:"Filtrar minha lista…",finished:"terminados",avg:"nota média",save:"Marcar como finalizado",cancel:"Cancelar",name:"O seu nome",saveName:"Guardar nome",opts:"Opções",lang:"Idioma",theme:"Tema",light:"Claro",dark:"Escuro",account:"Conta",out:"Sair",catCount:"{n} jogos no catálogo",done:"Finalizei",inList:"✓ na lista",addQ:"Não encontrou? Adicionar",add:"Adicionar",none:"Nenhum resultado.",empty:"Ainda não há jogos. Pesquise e adicione o primeiro!",eShort:"Use ao menos 3 letras no nome e de 4 a 12 caracteres na senha.",eTaken:"Esse nome já existe.",eBad:"Usuário ou senha incorretos.",nameOk:"Nome atualizado.",nameShort:"Use ao menos 3 letras."},
-en:{cvUrl:"Cover image link (optional)",cvPick:"Choose image from device",cvBad:"Could not read the image.",authSub:"Create an account to keep your list of finished games.",login:"Log in",reg:"Sign up",create:"Create account",user:"Username",pass:"Password (4–12 characters)",note:"Prototype: your data is stored only on this device.",nSearch:"Search",nDone:"Finished",nProf:"Profile",hSearch:"Search games",hDone:"Finished games",hProf:"Profile & options",phQ:"E.g.: Zelda, Hollow Knight…",phF:"Filter my list…",finished:"finished",avg:"average score",save:"Mark as finished",cancel:"Cancel",name:"Your name",saveName:"Save name",opts:"Options",lang:"Language",theme:"Theme",light:"Light",dark:"Dark",account:"Account",out:"Log out",catCount:"{n} games in the catalog",done:"Finished it",inList:"✓ in list",addQ:"Can't find it? Add",add:"Add",none:"No results.",empty:"No games yet. Search and add your first one!",eShort:"Use at least 3 characters for the name and 4 to 12 for the password.",eTaken:"That name already exists.",eBad:"Wrong username or password.",nameOk:"Name updated.",nameShort:"Use at least 3 characters."}};
+pt:{eNet:"Sem ligação ou erro no servidor. Tente de novo.",eConf:"Conta criada, mas é preciso desativar a confirmação por e-mail no Supabase.",cvUrl:"Link da capa (opcional)",cvPick:"Escolher imagem do aparelho",cvBad:"Não foi possível ler a imagem.",authSub:"Crie uma conta para guardar a sua lista de jogos terminados.",login:"Entrar",reg:"Cadastrar",create:"Criar conta",user:"Nome de usuário",pass:"Senha (6 a 12 caracteres)",note:"Os seus jogos ficam guardados na sua conta.",nSearch:"Pesquisar",nDone:"Zerados",nProf:"Perfil",hSearch:"Pesquisar jogos",hDone:"Jogos zerados",hProf:"Perfil e opções",phQ:"Ex.: Zelda, Hollow Knight…",phF:"Filtrar minha lista…",finished:"terminados",avg:"nota média",save:"Marcar como finalizado",cancel:"Cancelar",name:"O seu nome",saveName:"Guardar nome",opts:"Opções",lang:"Idioma",theme:"Tema",light:"Claro",dark:"Escuro",account:"Conta",out:"Sair",catCount:"{n} jogos no catálogo",done:"Finalizei",inList:"✓ na lista",addQ:"Não encontrou? Adicionar",add:"Adicionar",none:"Nenhum resultado.",empty:"Ainda não há jogos. Pesquise e adicione o primeiro!",eShort:"Nome de 3 a 20 letras e senha de 6 a 12 caracteres.",eTaken:"Esse nome já existe.",eBad:"Usuário ou senha incorretos.",nameOk:"Nome atualizado.",nameShort:"Use de 3 a 20 letras."},
+en:{eNet:"No connection or server error. Try again.",eConf:"Account created, but email confirmation must be turned off in Supabase.",cvUrl:"Cover image link (optional)",cvPick:"Choose image from device",cvBad:"Could not read the image.",authSub:"Create an account to keep your list of finished games.",login:"Log in",reg:"Sign up",create:"Create account",user:"Username",pass:"Password (6–12 characters)",note:"Your games are saved in your account.",nSearch:"Search",nDone:"Finished",nProf:"Profile",hSearch:"Search games",hDone:"Finished games",hProf:"Profile & options",phQ:"E.g.: Zelda, Hollow Knight…",phF:"Filter my list…",finished:"finished",avg:"average score",save:"Mark as finished",cancel:"Cancel",name:"Your name",saveName:"Save name",opts:"Options",lang:"Language",theme:"Theme",light:"Light",dark:"Dark",account:"Account",out:"Log out",catCount:"{n} games in the catalog",done:"Finished it",inList:"✓ in list",addQ:"Can't find it? Add",add:"Add",none:"No results.",empty:"No games yet. Search and add your first one!",eShort:"Name: 3–20 characters; password: 6–12 characters.",eTaken:"That name already exists.",eBad:"Wrong username or password.",nameOk:"Name updated.",nameShort:"Use 3 to 20 characters."}};
 const $=id=>document.getElementById(id);
 const norm=s=>s.normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 const esc=s=>s.replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -230,11 +230,41 @@ function save(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 async function hash(s){try{const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(s));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("")}catch(e){return s}}
 let prefs=load("jf_prefs",{lang:"pt",theme:null}),mode="login",me=null,pending=null,page="search";
 const RAWG_KEY="e3fde6c2281d47fdba0831cea04d2ec0"; // cole aqui a sua chave gratuita de rawg.io/apidocs
+const SB_URL="https://tcrlorejoegxrapjvcja.supabase.co",SB_KEY="sb_publishable_H48QMNa8xkCAndj_UFoFsA_cBvwcHkz";
+const em=u=>[...new TextEncoder().encode(norm(u))].map(b=>b.toString(16).padStart(2,"0")).join("")+"@jogoszerados.app";
+let U=null,S=load("jf_sb",null);
+function setS(d){S={access_token:d.access_token,refresh_token:d.refresh_token};save("jf_sb",S)}
+async function refresh(){
+  try{const r=await fetch(SB_URL+"/auth/v1/token?grant_type=refresh_token",{method:"POST",headers:{apikey:SB_KEY,"Content-Type":"application/json"},body:JSON.stringify({refresh_token:S.refresh_token})});
+    if(!r.ok)return false;setS(await r.json());return true}catch(e){return false}
+}
+async function sb(path,o={},retry=true){
+  const h={apikey:SB_KEY,"Content-Type":"application/json",...(o.headers||{})};
+  if(S&&!o.anon)h.Authorization="Bearer "+S.access_token;
+  const r=await fetch(SB_URL+path,{method:o.method,body:o.body,headers:h});
+  if(r.status===401&&S&&retry&&!o.anon&&await refresh())return sb(path,o,false);
+  return r;
+}
+async function loadGames(){
+  const r=await sb("/rest/v1/games?select=id,name,cover,score,date&order=created_at.asc");
+  if(!r.ok)throw 0;U.games=await r.json();
+}
+async function boot(){
+  if(S){
+    try{
+      const r=await sb("/auth/v1/user");
+      if(r.status===401||r.status===403){S=null;save("jf_sb",null)}
+      else if(r.ok){const d=await r.json();U={name:(d.user_metadata&&d.user_metadata.name)||"",games:[]};me=d.id;await loadGames()}
+      else throw 0;
+    }catch(e){U=null;me=null;$("aerr").textContent=t("eNet")}
+  }
+  show();
+}
 const cvHtml=(n,u)=>u?`<img class="cv" src="${esc(u)}" alt="" loading="lazy" referrerpolicy="no-referrer">`:`<div class="cv ph" style="background:hsl(${[...n].reduce((a,c)=>a+c.charCodeAt(0),0)%360} 45% 42%)">${esc(n.replace(/[^\p{L}\p{N} ]/gu,"").split(" ").filter(Boolean).slice(0,2).map(w=>w[0]).join("").toUpperCase())}</div>`;
 const t=k=>(I[prefs.lang]||I.pt)[k]||k;
 const PG=["search","done","prof"],TT={search:"hSearch",done:"hDone",prof:"hProf"};
-function me_(){return load("jf_users",{})[me]}
-function put(fn){const u=load("jf_users",{});fn(u[me]);save("jf_users",u)}
+function me_(){return U}
+
 
 function eff(){return prefs.theme||(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}
 function applyTheme(){const r=document.documentElement;if(prefs.theme)r.dataset.theme=prefs.theme;else delete r.dataset.theme;$("bLight").classList.toggle("on",eff()==="light");$("bDark").classList.toggle("on",eff()==="dark")}
@@ -257,15 +287,20 @@ function setMode(m){mode=m;$("tLogin").className=m==="login"?"":"ghost";$("tReg"
 $("tLogin").onclick=()=>setMode("login");$("tReg").onclick=()=>setMode("reg");
 $("aok").onclick=async()=>{
   const u=$("user").value.trim(),p=$("pass").value;
-  if(u.length<3||p.length<4||p.length>12){$("aerr").textContent=t("eShort");return}
-  const users=load("jf_users",{}),key=norm(u),h=await hash(p);
-  if(mode==="reg"){
-    if(users[key]){$("aerr").textContent=t("eTaken");return}
-    users[key]={name:u,h,games:[]};save("jf_users",users);
-  }else if(!users[key]||users[key].h!==h){$("aerr").textContent=t("eBad");return}
-  me=key;save("jf_session",me);$("pass").value="";page="search";show();
+  if(u.length<3||u.length>20||p.length<6||p.length>12){$("aerr").textContent=t("eShort");return}
+  $("aerr").textContent="…";$("aok").disabled=true;
+  try{
+    const body=JSON.stringify(mode==="reg"?{email:em(u),password:p,data:{name:u}}:{email:em(u),password:p});
+    const r=await sb(mode==="reg"?"/auth/v1/signup":"/auth/v1/token?grant_type=password",{method:"POST",body,anon:true});
+    const d=await r.json();
+    if(!r.ok||!d.access_token){
+      const m=(d.msg||d.error_description||d.message||"").toLowerCase();
+      $("aerr").textContent=/already|registered/.test(m)?t("eTaken"):(mode==="reg"&&r.ok)?t("eConf"):/invalid|credentials/.test(m)?t("eBad"):t("eNet");
+    }else{setS(d);$("pass").value="";page="search";$("aerr").textContent="";await boot()}
+  }catch(e){$("aerr").textContent=t("eNet")}
+  $("aok").disabled=false;
 };
-$("out").onclick=()=>{me=null;save("jf_session",null);show()};
+$("out").onclick=async()=>{try{await sb("/auth/v1/logout",{method:"POST"})}catch(e){}S=null;save("jf_sb",null);U=null;me=null;show()};
 
 function head(){$("ttl").textContent=t(TT[page]);$("who").textContent="👤 "+me_().name;$("cnt").textContent=t("catCount").replace("{n}",CAT.length)}
 function go(p){
@@ -288,7 +323,10 @@ function render(){
   $("list").innerHTML=items.length?items.map(x=>`<div class="row"><div class="it">${cvHtml(x.name,x.cover)}<div><div class="name">${esc(x.name)}</div><span class="mut">${x.date}</span></div></div><div style="display:flex;gap:8px;align-items:center"><span class="badge">${x.score}</span><button class="ghost sm" data-del="${x.i}" type="button" aria-label="✕">✕</button></div></div>`).join(""):'<p class="mut">'+t(g.length?"none":"empty")+"</p>";
 }
 $("f").oninput=render;
-$("list").onclick=e=>{const i=e.target.dataset.del;if(i!==undefined){put(u=>u.games.splice(+i,1));render();search()}};
+$("list").onclick=async e=>{
+  const i=e.target.dataset.del;if(i===undefined)return;const g=U.games[+i];
+  try{const r=await sb("/rest/v1/games?id=eq."+g.id,{method:"DELETE"});if(!r.ok)throw 0;U.games.splice(+i,1);render();search()}catch(x){alert(t("eNet"))}
+};
 
 let found={},tm,pendCover="";
 function showRes(list,raw,done){
@@ -317,21 +355,27 @@ $("q").oninput=search;
 $("res").onclick=e=>{const n=e.target.dataset.add;if(n){pending=n;pendCover=found[n]||"";$("pcv").innerHTML=cvHtml(n,pendCover);$("cvUrl").value="";$("cvMsg").textContent="";$("pname").textContent=n;$("score").value=8;$("sv").textContent="8";$("pend").classList.remove("hide");$("res").innerHTML=""}};
 $("score").oninput=()=>$("sv").textContent=$("score").value;
 $("cancel").onclick=()=>{pending=null;$("pend").classList.add("hide");search()};
-$("save").onclick=()=>{
+$("save").onclick=async()=>{
   if(!pending)return;
-  put(u=>u.games.push({name:pending,cover:pendCover,score:parseFloat($("score").value),date:new Date().toLocaleDateString(prefs.lang==="en"?"en-GB":"pt-PT")}));
+  const row={name:pending,cover:pendCover||null,score:parseFloat($("score").value),date:new Date().toLocaleDateString(prefs.lang==="en"?"en-GB":"pt-PT")};
+  $("save").disabled=true;
+  try{
+    const r=await sb("/rest/v1/games",{method:"POST",headers:{Prefer:"return=representation"},body:JSON.stringify(row)});
+    if(!r.ok)throw 0;
+    const d=await r.json();U.games.push(d[0]);
+  }catch(e){alert(t("eNet"));$("save").disabled=false;return}
+  $("save").disabled=false;
   pending=null;$("pend").classList.add("hide");$("q").value="";render();search();
 };
-
-$("saveName").onclick=()=>{
-  const n=$("newName").value.trim(),k=norm(n),users=load("jf_users",{}),m=$("pmsg");
-  if(n.length<3){m.className="err";m.textContent=t("nameShort");return}
-  if(k!==me&&users[k]){m.className="err";m.textContent=t("eTaken");return}
-  const u=users[me];u.name=n;
-  if(k!==me){delete users[me];users[k]=u;me=k;save("jf_session",me)}
-  save("jf_users",users);m.className="err ok";m.textContent=t("nameOk");head();
+$("saveName").onclick=async()=>{
+  const n=$("newName").value.trim(),m=$("pmsg");
+  if(n.length<3||n.length>20){m.className="err";m.textContent=t("nameShort");return}
+  try{
+    const r=await sb("/auth/v1/user",{method:"PUT",body:JSON.stringify({data:{name:n}})});
+    if(!r.ok)throw 0;
+    U.name=n;m.className="err ok";m.textContent=t("nameOk");head();
+  }catch(e){m.className="err";m.textContent=t("eNet")}
 };
-
 function prevCv(){if(pending)$("pcv").innerHTML=cvHtml(pending,pendCover)}
 $("cvUrl").oninput=()=>{const v=$("cvUrl").value.trim();pendCover=/^https?:\/\//i.test(v)?v:"";prevCv()};
 $("cvPick").onclick=()=>$("cvFile").click();
@@ -346,7 +390,7 @@ $("cvFile").onchange=e=>{
   rd.readAsDataURL(f);e.target.value="";
 };
 if("serviceWorker"in navigator)addEventListener("load",()=>navigator.serviceWorker.register("sw.js").catch(()=>{}));
-me=load("jf_session",null);applyTheme();setMode("login");applyLang();show();
+applyTheme();setMode("login");applyLang();boot();
 </script>
 </body>
 </html>
